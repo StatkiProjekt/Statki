@@ -8,7 +8,7 @@
     <style>
         .board {
             display: grid;
-            grid-template-columns: repeat(10, 40px);
+            grid-template-columns: repeat(11, 40px); /* Dostosowuję liczbę kolumn na planszy do dodanych współrzędnych */
             gap: 5px;
         }
 
@@ -20,31 +20,77 @@
             line-height: 40px;
             cursor: pointer;
         }
+
+        .coordinates {
+            display: grid;
+            grid-template-columns: 40px repeat(10, 40px); /* Dostosowuję szerokość kolumny z literami do reszty planszy */
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .coordinate {
+            text-align: center;
+        }
     </style>
 </head>
 
 <body>
     <h1>Battleship Game</h1>
 
-    <h2>Your Board</h2>
-    <div id="playerBoard" class="board"></div>
+    <h2 style="float: left;">Your Board</h2>
+    <div id="playerBoard" class="board" style="float: left;"></div>
 
-    <h2>CPU Board</h2>
-    <div id="cpuBoard" class="board"></div>
+    <h2 style="float: right;">CPU Board</h2>
+    <div id="cpuBoard" class="board" style="float: right;"></div>
+
+    <h2>Game Status</h2>
+    <div id="gameStatus"></div>
 
     <script>
         const playerBoard = document.getElementById('playerBoard');
         const cpuBoard = document.getElementById('cpuBoard');
+        const gameStatus = document.getElementById('gameStatus');
         const playerShips = [];
         const cpuShips = [];
+        let playerShipsLeft = 4;
+        let cpuShipsLeft = 4;
 
         function createBoard(boardElement, onClick) {
-            for (let i = 0; i < 100; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.dataset.index = i;
-                cell.addEventListener('click', () => onClick(i));
-                boardElement.appendChild(cell);
+            // Dodaję współrzędne pól
+            const coordinatesRow = document.createElement('div');
+            coordinatesRow.className = 'coordinates';
+
+            for (let i = 0; i < 11; i++) {
+                const coordinate = document.createElement('div');
+                coordinate.className = 'coordinate';
+                coordinate.textContent = i === 0 ? '' : String.fromCharCode(64 + i); // Kod ASCII liter A-J
+                coordinatesRow.appendChild(coordinate);
+            }
+
+            boardElement.appendChild(coordinatesRow);
+
+            // Dodaję resztę planszy
+            for (let i = 0; i < 10; i++) {
+                const row = document.createElement('div');
+                row.className = 'board-row';
+
+                for (let j = 0; j < 11; j++) {
+                    if (j === 0) {
+                        // Wstawiam współrzędną rzędu
+                        const coordinate = document.createElement('div');
+                        coordinate.className = 'cell coordinate';
+                        coordinate.textContent = i + 1;
+                        row.appendChild(coordinate);
+                    } else {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.dataset.index = i * 10 + (j - 1);
+                        cell.addEventListener('click', () => onClick(i * 10 + (j - 1)));
+                        row.appendChild(cell);
+                    }
+                }
+
+                boardElement.appendChild(row);
             }
         }
 
@@ -60,12 +106,14 @@
                 alert('Hit! Player scored a point.');
                 console.log('CPU Ship hit at index:', index);
                 document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'S';
+                cpuShipsLeft--;
             } else {
                 alert('Miss! Player missed.');
                 console.log('Player missed at index:', index);
                 document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'X';
             }
             cpuMove();
+            updateGameStatus();
         }
 
         function handleCpuClick(index) {
@@ -73,11 +121,13 @@
                 alert('Hit! CPU scored a point.');
                 console.log('Player Ship hit at index:', index);
                 document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'S';
+                playerShipsLeft--;
             } else {
                 alert('Miss! CPU missed.');
                 console.log('CPU missed at index:', index);
                 document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'X';
             }
+            updateGameStatus();
         }
 
         function cpuMove() {
@@ -86,6 +136,7 @@
                 alert('CPU hit your ship!');
                 console.log('Player Ship hit at index:', randomIndex);
                 document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'S';
+                playerShipsLeft--;
             } else {
                 alert('CPU missed.');
                 console.log('CPU missed at index:', randomIndex);
@@ -99,11 +150,45 @@
             });
         }
 
+        function updateGameStatus() {
+            if (playerShipsLeft === 0) {
+                gameStatus.textContent = 'Congratulations! You won!';
+
+                if (confirm('Do you want to play again?')) {
+                    resetGame();
+                }
+            } else if (cpuShipsLeft === 0) {
+                gameStatus.textContent = 'CPU won. Better luck next time.';
+
+                if (confirm('Do you want to play again?')) {
+                    resetGame();
+                }
+            } else {
+                gameStatus.textContent = `Player ships left: ${playerShipsLeft} | CPU ships left: ${cpuShipsLeft}`;
+            }
+        }
+
+        function resetGame() {
+            playerShips.length = 0;
+            cpuShips.length = 0;
+            playerShipsLeft = 4;
+            cpuShipsLeft = 4;
+            playerBoard.innerHTML = '';
+            cpuBoard.innerHTML = '';
+            gameStatus.textContent = '';
+            initializeShips();
+            createBoard(playerBoard, handlePlayerClick);
+            createBoard(cpuBoard, handleCpuClick);
+            displayShips(playerBoard, playerShips);
+            displayShips(cpuBoard, cpuShips);
+        }
+
         createBoard(playerBoard, handlePlayerClick);
         createBoard(cpuBoard, handleCpuClick);
         initializeShips();
         displayShips(playerBoard, playerShips);
         displayShips(cpuBoard, cpuShips);
+        updateGameStatus();
     </script>
 </body>
 
