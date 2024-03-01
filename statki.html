@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battleship Game</title>
+    <style>
+        .board {
+            display: grid;
+            grid-template-columns: repeat(10, 40px);
+            gap: 5px;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Battleship Game</h1>
+
+    <h2>Your Board</h2>
+    <div id="playerBoard" class="board"></div>
+
+    <h2>CPU Board</h2>
+    <div id="cpuBoard" class="board"></div>
+
+    <script>
+        const playerBoard = document.getElementById('playerBoard');
+        const cpuBoard = document.getElementById('cpuBoard');
+        const playerShips = [];
+        const cpuShips = [];
+
+        function createBoard(boardElement, onClick) {
+            for (let i = 0; i < 100; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i;
+                cell.addEventListener('click', () => onClick(i));
+                boardElement.appendChild(cell);
+            }
+        }
+
+        function initializeShips() {
+            for (let i = 0; i < 4; i++) {
+                playerShips.push(Math.floor(Math.random() * 100));
+                cpuShips.push(Math.floor(Math.random() * 100));
+            }
+        }
+
+        function handlePlayerClick(index) {
+            if (cpuShips.includes(index)) {
+                alert('Hit! Player scored a point.');
+                console.log('CPU Ship hit at index:', index);
+                document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'S';
+            } else {
+                alert('Miss! Player missed.');
+                console.log('Player missed at index:', index);
+                document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'X';
+            }
+            cpuMove();
+        }
+
+        function handleCpuClick(index) {
+            if (playerShips.includes(index)) {
+                alert('Hit! CPU scored a point.');
+                console.log('Player Ship hit at index:', index);
+                document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'S';
+            } else {
+                alert('Miss! CPU missed.');
+                console.log('CPU missed at index:', index);
+                document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'X';
+            }
+        }
+
+        function cpuMove() {
+            const randomIndex = Math.floor(Math.random() * 100);
+            if (playerShips.includes(randomIndex)) {
+                alert('CPU hit your ship!');
+                console.log('Player Ship hit at index:', randomIndex);
+                document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'S';
+            } else {
+                alert('CPU missed.');
+                console.log('CPU missed at index:', randomIndex);
+                document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'X';
+            }
+        }
+
+        function displayShips(boardElement, ships) {
+            ships.forEach(index => {
+                document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).textContent = 'Q';
+            });
+        }
+
+        createBoard(playerBoard, handlePlayerClick);
+        createBoard(cpuBoard, handleCpuClick);
+        initializeShips();
+        displayShips(playerBoard, playerShips);
+        displayShips(cpuBoard, cpuShips);
+    </script>
+</body>
+
+</html>
