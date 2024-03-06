@@ -8,7 +8,7 @@
     <style>
         .board {
             display: grid;
-            grid-template-columns: repeat(11, 40px); /* Dostosowuję liczbę kolumn na planszy do dodanych współrzędnych */
+            grid-template-columns: 40px repeat(10, 40px);
             gap: 5px;
         }
 
@@ -23,7 +23,7 @@
 
         .coordinates {
             display: grid;
-            grid-template-columns: 40px repeat(10, 40px); /* Dostosowuję szerokość kolumny z literami do reszty planszy */
+            grid-template-columns: 40px;
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -56,27 +56,24 @@
         let cpuShipsLeft = 4;
 
         function createBoard(boardElement, onClick) {
-            // Dodaję współrzędne pól
             const coordinatesRow = document.createElement('div');
             coordinatesRow.className = 'coordinates';
 
             for (let i = 0; i < 11; i++) {
                 const coordinate = document.createElement('div');
                 coordinate.className = 'coordinate';
-                coordinate.textContent = i === 0 ? '' : String.fromCharCode(64 + i); // Kod ASCII liter A-J
+                coordinate.textContent = i === 0 ? '' : String.fromCharCode(64 + i);
                 coordinatesRow.appendChild(coordinate);
             }
 
             boardElement.appendChild(coordinatesRow);
 
-            // Dodaję resztę planszy
             for (let i = 0; i < 10; i++) {
                 const row = document.createElement('div');
                 row.className = 'board-row';
 
                 for (let j = 0; j < 11; j++) {
                     if (j === 0) {
-                        // Wstawiam współrzędną rzędu
                         const coordinate = document.createElement('div');
                         coordinate.className = 'cell coordinate';
                         coordinate.textContent = i + 1;
