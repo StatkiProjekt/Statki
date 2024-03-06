@@ -92,10 +92,87 @@
         }
 
         function initializeShips() {
-            for (let i = 0; i < 4; i++) {
-                playerShips.push(Math.floor(Math.random() * 100));
-                cpuShips.push(Math.floor(Math.random() * 100));
+            const shipLengths = [4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1];
+
+            for (let i = 0; i < shipLengths.length; i++) {
+                let shipPlaced = false;
+                while (!shipPlaced) {
+                    const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+                    const shipStart = Math.floor(Math.random() * 100);
+
+                    if (canPlaceShip(shipStart, shipLengths[i], orientation, playerShips)) {
+                        placeShip(shipStart, shipLengths[i], orientation, playerShips);
+                        shipPlaced = true;
+                    }
+                }
             }
+
+            for (let i = 0; i < shipLengths.length; i++) {
+                let shipPlaced = false;
+                while (!shipPlaced) {
+                    const orientation = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+                    const shipStart = Math.floor(Math.random() * 100);
+
+                    if (canPlaceShip(shipStart, shipLengths[i], orientation, cpuShips)) {
+                        placeShip(shipStart, shipLengths[i], orientation, cpuShips);
+                        shipPlaced = true;
+                    }
+                }
+            }
+        }
+
+        function canPlaceShip(startIndex, length, orientation, ships) {
+            const endIndex = orientation === 'horizontal' ? startIndex + length - 1 : startIndex + (length - 1) * 10;
+
+            if (endIndex >= 100) {
+                return false;
+            }
+
+            for (let i = startIndex; i <= endIndex; i++) {
+                if (ships.includes(i) || hasAdjacentShip(i, orientation, ships)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function hasAdjacentShip(index, orientation, ships) {
+            const adjacentIndices = [];
+
+            if (index % 10 !== 0) {
+                adjacentIndices.push(index - 1);
+            }
+
+            if (index % 10 !== 9) {
+                adjacentIndices.push(index + 1);
+            }
+
+            if (Math.floor(index / 10) !== 0) {
+                adjacentIndices.push(index - 10);
+            }
+
+            if (Math.floor(index / 10) !== 9) {
+                adjacentIndices.push(index + 10);
+            }
+
+            if (orientation === 'horizontal') {
+                adjacentIndices.push(index - 10, index + 10);
+            } else {
+                adjacentIndices.push(index - 1, index + 1);
+            }
+
+            return adjacentIndices.some(adjacentIndex => ships.includes(adjacentIndex));
+        }
+
+        function placeShip(startIndex, length, orientation, ships) {
+            const shipIndices = [startIndex];
+
+            for (let i = 1; i < length; i++) {
+                shipIndices.push(orientation === 'horizontal' ? startIndex + i : startIndex + i * 10);
+            }
+
+            ships.push(...shipIndices);
         }
 
         function handlePlayerClick(index) {
