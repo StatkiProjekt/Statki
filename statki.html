@@ -129,7 +129,7 @@
             }
 
             for (let i = startIndex; i <= endIndex; i++) {
-                if (ships.includes(i) || hasAdjacentShip(i, orientation, ships)) {
+                if (ships.includes(i) || hasAdjacentShip(i, orientation, ships) || hasNeighboringShip(i, length, orientation, ships)) {
                     return false;
                 }
             }
@@ -137,15 +137,42 @@
             return true;
         }
 
+        function hasNeighboringShip(index, length, orientation, ships) {
+            const adjacentIndices = [];
+
+            for (let i = 0; i < length; i++) {
+                if (orientation === 'horizontal') {
+                    adjacentIndices.push(index - 10 + i, index + 10 + i);
+                } else {
+                    adjacentIndices.push(index - 1 + i * 10, index + 1 + i * 10);
+                }
+            }
+
+            return adjacentIndices.some(adjacentIndex => ships.includes(adjacentIndex));
+        }
+
+
         function hasAdjacentShip(index, orientation, ships) {
             const adjacentIndices = [];
 
             if (index % 10 !== 0) {
                 adjacentIndices.push(index - 1);
+                if (Math.floor(index / 10) !== 0) {
+                    adjacentIndices.push(index - 11);
+                }
+                if (Math.floor(index / 10) !== 9) {
+                    adjacentIndices.push(index + 9);
+                }
             }
 
             if (index % 10 !== 9) {
                 adjacentIndices.push(index + 1);
+                if (Math.floor(index / 10) !== 0) {
+                    adjacentIndices.push(index - 9);
+                }
+                if (Math.floor(index / 10) !== 9) {
+                    adjacentIndices.push(index + 11);
+                }
             }
 
             if (Math.floor(index / 10) !== 0) {
