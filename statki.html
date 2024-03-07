@@ -47,13 +47,14 @@
     <div id="gameStatus"></div>
 
     <script>
+        const shipLengths = [4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1];
         const playerBoard = document.getElementById('playerBoard');
         const cpuBoard = document.getElementById('cpuBoard');
         const gameStatus = document.getElementById('gameStatus');
         const playerShips = [];
         const cpuShips = [];
-        let playerShipsLeft = 4;
-        let cpuShipsLeft = 4;
+        let playerShipsLeft = 22;
+        let cpuShipsLeft = 22;
 
         function createBoard(boardElement, onClick) {
             const coordinatesRow = document.createElement('div');
@@ -92,7 +93,6 @@
         }
 
         function initializeShips() {
-            const shipLengths = [4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1];
 
             for (let i = 0; i < shipLengths.length; i++) {
                 let shipPlaced = false;
@@ -246,20 +246,24 @@
         }
 
         function displayShips(boardElement, ships) {
-            ships.forEach(index => {
-                document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).textContent = 'Q';
-            });
+            if (boardElement.id === 'playerBoard') {
+                ships.forEach(index => {
+                    document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).textContent = 'Q';
+                });
+            }
         }
 
         function updateGameStatus() {
+            const totalShipCells = shipLengths.reduce((sum, length) => sum + length, 0);
+
             if (playerShipsLeft === 0) {
-                gameStatus.textContent = 'Congratulations! You won!';
+                gameStatus.textContent = `Congratulations! You won! Total Ship Cells: ${totalShipCells}`;
 
                 if (confirm('Do you want to play again?')) {
                     resetGame();
                 }
             } else if (cpuShipsLeft === 0) {
-                gameStatus.textContent = 'CPU won. Better luck next time.';
+                gameStatus.textContent = `CPU won. Better luck next time. Total Ship Cells: ${totalShipCells}`;
 
                 if (confirm('Do you want to play again?')) {
                     resetGame();
@@ -268,7 +272,6 @@
                 gameStatus.textContent = `Player ships left: ${playerShipsLeft} | CPU ships left: ${cpuShipsLeft}`;
             }
         }
-
         function resetGame() {
             playerShips.length = 0;
             cpuShips.length = 0;
