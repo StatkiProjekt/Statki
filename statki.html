@@ -31,6 +31,10 @@
         .coordinate {
             text-align: center;
         }
+        .cos{
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 
@@ -203,55 +207,84 @@
         }
 
         function handlePlayerClick(index) {
-            if (cpuShips.includes(index)) {
-                alert('Hit! Player scored a point.');
-                console.log('CPU Ship hit at index:', index);
-                document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'S';
-                cpuShipsLeft--;
-            } else {
-                alert('Miss! Player missed.');
-                console.log('Player missed at index:', index);
-                document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'X';
-            }
-            cpuMove();
-            updateGameStatus();
-        }
+    if (cpuShips.includes(index)) {
+        alert('Hit! Player scored a point.');
+        console.log('CPU Ship hit at index:', index);
+        
+        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla trafienia
+        var sciezkaDoZdjeciaTrafienia = 'traf.png';
+        
+        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaTrafienia}" class="cos" alt="Hit" />`;
+        cpuShipsLeft--;
+    } else {
+        alert('Miss! Player missed.');
+        console.log('Player missed at index:', index);
+        
+        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla pudła
+        var sciezkaDoZdjeciaPudla = 'full-stop-filled.png';
 
-        function handleCpuClick(index) {
-            if (playerShips.includes(index)) {
-                alert('Hit! CPU scored a point.');
-                console.log('Player Ship hit at index:', index);
-                document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'S';
-                playerShipsLeft--;
-            } else {
-                alert('Miss! CPU missed.');
-                console.log('CPU missed at index:', index);
-                document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'X';
-            }
-            updateGameStatus();
-        }
+        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaPudla}" class="cos" alt="Miss" />`;
+    }
+    cpuMove();
+    updateGameStatus();
+}
 
-        function cpuMove() {
-            const randomIndex = Math.floor(Math.random() * 100);
-            if (playerShips.includes(randomIndex)) {
-                alert('CPU hit your ship!');
-                console.log('Player Ship hit at index:', randomIndex);
-                document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'S';
-                playerShipsLeft--;
-            } else {
-                alert('CPU missed.');
-                console.log('CPU missed at index:', randomIndex);
-                document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'X';
-            }
-        }
+function handleCpuClick(index) {
+    if (playerShips.includes(index)) {
+        alert('Hit! CPU scored a point.');
+        console.log('Player Ship hit at index:', index);
 
+        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla trafienia
+        var sciezkaDoZdjeciaTrafienia = 'traf.png';
+
+        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaTrafienia}" class="cos" alt="Hit" />`;
+        playerShipsLeft--;
+    } else {
+        alert('Miss! CPU missed.');
+        console.log('CPU missed at index:', index);
+
+        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla pudła
+        var sciezkaDoZdjeciaPudla = 'full-stop-filled.png';
+
+        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaPudla}" class="cos" alt="Miss" />`;
+    }
+    updateGameStatus();
+}
+
+function cpuMove() {
+    const randomIndex = Math.floor(Math.random() * 100);
+    if (playerShips.includes(randomIndex)) {
+        alert('CPU hit your ship!');
+        console.log('Player Ship hit at index:', randomIndex);
+
+        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla trafienia
+        var sciezkaDoZdjeciaTrafienia = 'traf.png';
+
+        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = `<img src="${sciezkaDoZdjeciaTrafienia}" class="cos" alt="Hit" />`;
+        playerShipsLeft--;
+    } else {
+        alert('CPU missed.');
+        console.log('CPU missed at index:', randomIndex);
+
+        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla pudła
+        var sciezkaDoZdjeciaPudla = 'full-stop-filled.png';
+
+        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = `<img src="${sciezkaDoZdjeciaPudla}" class="cos" alt="Miss" />`;
+    }
+}
+
+        
         function displayShips(boardElement, ships) {
-            if (boardElement.id === 'playerBoard') {
-                ships.forEach(index => {
-                    document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).textContent = 'Q';
-                });
-            }
-        }
+    if (boardElement.id === 'playerBoard') {
+        ships.forEach(index => {
+            var cell = document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`);
+            
+            var sciezkaDoZdjecia = '8519902.png';
+            cell.innerHTML = `<img src="${sciezkaDoZdjecia}" alt="Cos" class="cos" />`;
+        });
+    }
+}
+
 
         function updateGameStatus() {
             const totalShipCells = shipLengths.reduce((sum, length) => sum + length, 0);
