@@ -57,40 +57,44 @@
         let cpuShipsLeft = 22;
 
         function createBoard(boardElement, onClick) {
-            const coordinatesRow = document.createElement('div');
-            coordinatesRow.className = 'coordinates';
+    const coordinatesRow = document.createElement('div');
+    coordinatesRow.className = 'coordinates';
 
-            for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < 11; i++) {
+        const coordinate = document.createElement('div');
+        coordinate.className = 'coordinate';
+        coordinate.textContent = i === 0 ? '' : String.fromCharCode(64 + i);
+        coordinatesRow.appendChild(coordinate);
+    }
+
+    boardElement.appendChild(coordinatesRow);
+
+    for (let i = 0; i < 10; i++) {
+        const row = document.createElement('div');
+        row.className = 'board-row';
+
+        for (let j = 0; j < 11; j++) {
+            if (j === 0) {
                 const coordinate = document.createElement('div');
-                coordinate.className = 'coordinate';
-                coordinate.textContent = i === 0 ? '' : String.fromCharCode(64 + i);
-                coordinatesRow.appendChild(coordinate);
-            }
+                coordinate.className = 'cell coordinate';
+                coordinate.textContent = i + 1;
+                row.appendChild(coordinate);
+            } else {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                cell.dataset.index = i * 10 + (j - 1);
 
-            boardElement.appendChild(coordinatesRow);
-
-            for (let i = 0; i < 10; i++) {
-                const row = document.createElement('div');
-                row.className = 'board-row';
-
-                for (let j = 0; j < 11; j++) {
-                    if (j === 0) {
-                        const coordinate = document.createElement('div');
-                        coordinate.className = 'cell coordinate';
-                        coordinate.textContent = i + 1;
-                        row.appendChild(coordinate);
-                    } else {
-                        const cell = document.createElement('div');
-                        cell.className = 'cell';
-                        cell.dataset.index = i * 10 + (j - 1);
-                        cell.addEventListener('click', () => onClick(i * 10 + (j - 1)));
-                        row.appendChild(cell);
-                    }
+                if (boardElement.id === 'playerBoard') {
+                    cell.addEventListener('click', () => onClick(i * 10 + (j - 1)));
                 }
 
-                boardElement.appendChild(row);
+                row.appendChild(cell);
             }
         }
+
+        boardElement.appendChild(row);
+    }
+}
 
         function initializeShips() {
 
