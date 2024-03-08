@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -86,7 +87,11 @@
                         const cell = document.createElement('div');
                         cell.className = 'cell';
                         cell.dataset.index = i * 10 + (j - 1);
-                        cell.addEventListener('click', () => onClick(i * 10 + (j - 1)));
+
+                        if (boardElement.id === 'playerBoard') {
+                            cell.addEventListener('click', () => onClick(i * 10 + (j - 1)));
+                        }
+
                         row.appendChild(cell);
                     }
                 }
@@ -209,20 +214,12 @@
     if (cpuShips.includes(index)) {
         alert('Hit! Player scored a point.');
         console.log('CPU Ship hit at index:', index);
-        
-        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla trafienia
-        var sciezkaDoZdjeciaTrafienia = 'traf.png';
-        
-        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaTrafienia}" class="cos" alt="Hit" />`;
+        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
         cpuShipsLeft--;
     } else {
         alert('Miss! Player missed.');
         console.log('Player missed at index:', index);
-        
-        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla pudła
-        var sciezkaDoZdjeciaPudla = 'full-stop-filled.png';
-
-        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaPudla}" class="cos" alt="Miss" />`;
+        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
     }
     cpuMove();
     updateGameStatus();
@@ -232,20 +229,12 @@ function handleCpuClick(index) {
     if (playerShips.includes(index)) {
         alert('Hit! CPU scored a point.');
         console.log('Player Ship hit at index:', index);
-
-        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla trafienia
-        var sciezkaDoZdjeciaTrafienia = 'traf.png';
-
-        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaTrafienia}" class="cos" alt="Hit" />`;
+        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
         playerShipsLeft--;
     } else {
         alert('Miss! CPU missed.');
         console.log('CPU missed at index:', index);
-
-        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla pudła
-        var sciezkaDoZdjeciaPudla = 'full-stop-filled.png';
-
-        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = `<img src="${sciezkaDoZdjeciaPudla}" class="cos" alt="Miss" />`;
+        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
     }
     updateGameStatus();
 }
@@ -255,31 +244,19 @@ function cpuMove() {
     if (playerShips.includes(randomIndex)) {
         alert('CPU hit your ship!');
         console.log('Player Ship hit at index:', randomIndex);
-
-        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla trafienia
-        var sciezkaDoZdjeciaTrafienia = 'traf.png';
-
-        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = `<img src="${sciezkaDoZdjeciaTrafienia}" class="cos" alt="Hit" />`;
+        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
         playerShipsLeft--;
     } else {
         alert('CPU missed.');
         console.log('CPU missed at index:', randomIndex);
-
-        // Załóżmy, że masz ścieżkę do pliku ze zdjęciem dla pudła
-        var sciezkaDoZdjeciaPudla = 'full-stop-filled.png';
-
-        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = `<img src="${sciezkaDoZdjeciaPudla}" class="cos" alt="Miss" />`;
+        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
     }
 }
 
-        
-        function displayShips(boardElement, ships) {
+function displayShips(boardElement, ships) {
     if (boardElement.id === 'playerBoard') {
         ships.forEach(index => {
-            var cell = document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`);
-            
-            var sciezkaDoZdjecia = '8519902.png';
-            cell.innerHTML = `<img src="${sciezkaDoZdjecia}" alt="Cos" class="cos" />`;
+            document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).innerHTML = '<img src="statek.png" alt="Q" class="cos">';
         });
     }
 }
