@@ -31,11 +31,6 @@
         .coordinate {
             text-align: center;
         }
-
-        .cos{
-            width: 40px;
-            height: 40px;
-        }
     </style>
 </head>
 
@@ -45,10 +40,8 @@
     <h2 style="float: left;">Your Board</h2>
     <div id="playerBoard" class="board" style="float: left;"></div>
 
-
     <h2 style="float: right;">CPU Board</h2>
     <div id="cpuBoard" class="board" style="float: right;"></div>
-
 
     <h2>Game Status</h2>
     <div id="gameStatus"></div>
@@ -137,7 +130,6 @@
 
             if (endIndex >= 100) {
                 return false;
-
             }
 
             for (let i = startIndex; i <= endIndex; i++) {
@@ -215,56 +207,55 @@
         }
 
         function handlePlayerClick(index) {
-    if (cpuShips.includes(index)) {
-        alert('Hit! Player scored a point.');
-        console.log('CPU Ship hit at index:', index);
-        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
-        cpuShipsLeft--;
-    } else {
-        alert('Miss! Player missed.');
-        console.log('Player missed at index:', index);
-        document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
-    }
-    cpuMove();
-    updateGameStatus();
-}
+            if (cpuShips.includes(index)) {
+                alert('Hit! Player scored a point.');
+                console.log('CPU Ship hit at index:', index);
+                document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'S';
+                cpuShipsLeft--;
+            } else {
+                alert('Miss! Player missed.');
+                console.log('Player missed at index:', index);
+                document.querySelector(`#cpuBoard .cell[data-index='${index}']`).textContent = 'X';
+            }
+            cpuMove();
+            updateGameStatus();
+        }
 
-function handleCpuClick(index) {
-    if (playerShips.includes(index)) {
-        alert('Hit! CPU scored a point.');
-        console.log('Player Ship hit at index:', index);
-        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
-        playerShipsLeft--;
-    } else {
-        alert('Miss! CPU missed.');
-        console.log('CPU missed at index:', index);
-        document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
-    }
-    updateGameStatus();
-}
+        function handleCpuClick(index) {
+            if (playerShips.includes(index)) {
+                alert('Hit! CPU scored a point.');
+                console.log('Player Ship hit at index:', index);
+                document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'S';
+                playerShipsLeft--;
+            } else {
+                alert('Miss! CPU missed.');
+                console.log('CPU missed at index:', index);
+                document.querySelector(`#playerBoard .cell[data-index='${index}']`).textContent = 'X';
+            }
+            updateGameStatus();
+        }
 
-function cpuMove() {
-    const randomIndex = Math.floor(Math.random() * 100);
-    if (playerShips.includes(randomIndex)) {
-        alert('CPU hit your ship!');
-        console.log('Player Ship hit at index:', randomIndex);
-        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
-        playerShipsLeft--;
-    } else {
-        alert('CPU missed.');
-        console.log('CPU missed at index:', randomIndex);
-        document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
-    }
-}
+        function cpuMove() {
+            const randomIndex = Math.floor(Math.random() * 100);
+            if (playerShips.includes(randomIndex)) {
+                alert('CPU hit your ship!');
+                console.log('Player Ship hit at index:', randomIndex);
+                document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'S';
+                playerShipsLeft--;
+            } else {
+                alert('CPU missed.');
+                console.log('CPU missed at index:', randomIndex);
+                document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).textContent = 'X';
+            }
+        }
 
-function displayShips(boardElement, ships) {
-    if (boardElement.id === 'playerBoard') {
-        ships.forEach(index => {
-            document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).innerHTML = '<img src="statek.png" alt="Q" class="cos">';
-        });
-    }
-}
-
+        function displayShips(boardElement, ships) {
+            if (boardElement.id === 'playerBoard') {
+                ships.forEach(index => {
+                    document.querySelector(`#${boardElement.id} .cell[data-index='${index}']`).textContent = 'Q';
+                });
+            }
+        }
 
         function updateGameStatus() {
             const totalShipCells = shipLengths.reduce((sum, length) => sum + length, 0);
@@ -288,10 +279,8 @@ function displayShips(boardElement, ships) {
         function resetGame() {
             playerShips.length = 0;
             cpuShips.length = 0;
-
-            playerShipsLeft = 22;
-            cpuShipsLeft = 22;
-
+            playerShipsLeft = 4;
+            cpuShipsLeft = 4;
             playerBoard.innerHTML = '';
             cpuBoard.innerHTML = '';
             gameStatus.textContent = '';
