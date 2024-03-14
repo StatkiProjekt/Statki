@@ -1,12 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
     <style>
-        .board {
+        body {
+            background-image: image-set("dT9rXxAkc.png");
+            background-size: cover;
+        }
+        .tyt{
+            text-align: center;
+            color: darkblue;
+        }
+        .status{
+            text-align: center;
+        }
+        .board  {
             display: grid;
             grid-template-columns: 40px repeat(10, 40px);
             gap: 5px;
@@ -40,18 +51,18 @@
 </head>
 
 <body>
-    <h1>Battleship Game</h1>
+    <h1 class="tyt">Statki</h1>
 
-    <h2 style="float: left;">Your Board</h2>
+    <h2 style="float: left;">Twoje</h2>
     <div id="playerBoard" class="board" style="float: left;"></div>
 
 
-    <h2 style="float: right;">CPU Board</h2>
+    <h2 style="float: right;">CPU</h2>
     <div id="cpuBoard" class="board" style="float: right;"></div>
 
 
-    <h2>Game Status</h2>
-    <div id="gameStatus"></div>
+    <h2 class="status">Status</h2>
+    <div id="gameStatus" class="status"></div>
 
     <script>
         const shipLengths = [4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1];
@@ -216,13 +227,13 @@
 
         function handlePlayerClick(index) {
     if (cpuShips.includes(index)) {
-        alert('Hit! Player scored a point.');
-        console.log('CPU Ship hit at index:', index);
+        alert('Trafiłeś');
+        console.log('Trafiłeś:', index);
         document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
         cpuShipsLeft--;
     } else {
-        alert('Miss! Player missed.');
-        console.log('Player missed at index:', index);
+        alert('Nietrafiłeś');
+        console.log('Nietrafiłeś:', index);
         document.querySelector(`#cpuBoard .cell[data-index='${index}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
     }
     cpuMove();
@@ -231,13 +242,13 @@
 
 function handleCpuClick(index) {
     if (playerShips.includes(index)) {
-        alert('Hit! CPU scored a point.');
-        console.log('Player Ship hit at index:', index);
+        alert('CPU Trafia');
+        console.log('Trafił:', index);
         document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
         playerShipsLeft--;
     } else {
-        alert('Miss! CPU missed.');
-        console.log('CPU missed at index:', index);
+        alert('CPU Pudłuje');
+        console.log('CPU Pudłuje', index);
         document.querySelector(`#playerBoard .cell[data-index='${index}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
     }
     updateGameStatus();
@@ -246,13 +257,13 @@ function handleCpuClick(index) {
 function cpuMove() {
     const randomIndex = Math.floor(Math.random() * 100);
     if (playerShips.includes(randomIndex)) {
-        alert('CPU hit your ship!');
-        console.log('Player Ship hit at index:', randomIndex);
+        alert('CPU Trafia');
+        console.log('Trafił:', randomIndex);
         document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = '<img src="traf.png" alt="S" class="cos">';
         playerShipsLeft--;
     } else {
-        alert('CPU missed.');
-        console.log('CPU missed at index:', randomIndex);
+        alert('CPU Pudłuje');
+        console.log('CPU Pudłuje', randomIndex);
         document.querySelector(`#playerBoard .cell[data-index='${randomIndex}']`).innerHTML = '<img src="kropka.png" alt="X" class="cos">';
     }
 }
@@ -270,19 +281,19 @@ function displayShips(boardElement, ships) {
             const totalShipCells = shipLengths.reduce((sum, length) => sum + length, 0);
 
             if (playerShipsLeft === 0) {
-                gameStatus.textContent = `Congratulations! You won! Total Ship Cells: ${totalShipCells}`;
+                gameStatus.textContent = `Wygrywasz! Statki: ${totalShipCells}`;
 
-                if (confirm('Do you want to play again?')) {
+                if (confirm('Zagrać jeszcze raz?')) {
                     resetGame();
                 }
             } else if (cpuShipsLeft === 0) {
-                gameStatus.textContent = `CPU won. Better luck next time. Total Ship Cells: ${totalShipCells}`;
+                gameStatus.textContent = `CPU wygrywa. Statki: ${totalShipCells}`;
 
-                if (confirm('Do you want to play again?')) {
+                if (confirm('Zagrać jeszcze raz?')) {
                     resetGame();
                 }
             } else {
-                gameStatus.textContent = `Player ships left: ${playerShipsLeft} | CPU ships left: ${cpuShipsLeft}`;
+                gameStatus.textContent = `Statki Gracza: ${playerShipsLeft} | Statki CPU: ${cpuShipsLeft}`;
             }
         }
         function resetGame() {
