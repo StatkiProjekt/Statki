@@ -49,6 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <style>
+    body {
+            background-image: image-set("dT9rXxAkc.png");
+            background-size: cover;
+            color: darkblue;
+            text-align: center;
+    }
+    
+</style>
 </head>
 <body>
     <h2>Register</h2>
