@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <script>
     function goToMain() {
-        window.location.href = "mainstatki.php";
+        window.location.href = "index.php";
     }
 </script>
     </form>
