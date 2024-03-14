@@ -6,7 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
     <style>
-        .board {
+
+ body {
+            background-image: image-set("dT9rXxAkc.png");
+            background-size: cover;
+        }
+        .tyt{
+            text-align: center;
+            color: darkblue;
+        }
+        .status{
+            text-align: center;
+        }
+        .board  {
+
             display: grid;
             grid-template-columns: 40px repeat(10, 40px);
             gap: 5px;
@@ -42,19 +55,21 @@
 <body>
 
         <a href="register.php">Register</a> <a href="logout.php">Logout</a>
-    </div>
-    <h1>Battleship Game</h1>
 
-    <h2 style="float: left;">Your Board</h2>
-    <div id="playerBoard" class="board" style="float: left;"></div>
+        <h1 class="tyt">Statki</h1>
 
-
-    <h2 style="float: right;">CPU Board</h2>
-    <div id="cpuBoard" class="board" style="float: right;"></div>
+<h2 style="float: left;">Twoje</h2>
+<div id="playerBoard" class="board" style="float: left;"></div>
 
 
-    <h2>Game Status</h2>
-    <div id="gameStatus"></div>
+<h2 style="float: right;">CPU</h2>
+<div id="cpuBoard" class="board" style="float: right;"></div>
+
+
+<h2 class="status">Status</h2>
+<div id="gameStatus" class="status"></div>
+
+
 
     <script>
         const shipLengths = [4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1];
