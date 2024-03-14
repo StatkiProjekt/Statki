@@ -1,14 +1,18 @@
 <?php
 session_start();
 
+
 $battleshipFrameDisplay = 'none';
 $errorMessage = '';
+
 
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     $battleshipFrameDisplay = 'block';
 }
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     $username = $_POST['username'];
     $password = $_POST['password'];
     $servername = "localhost";
@@ -16,11 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $db_password = "";
     $database = "ships";
 
+
     $conn = mysqli_connect($servername, $db_username, $db_password, $database);
+
 
     if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
+
 
     $username = mysqli_real_escape_string($conn, $username);
     $query = "SELECT * FROM playerdata WHERE username = '$username'";
@@ -28,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+
 
         if ($password === $row['password']) {
             $_SESSION['loggedin'] = true;
@@ -38,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $errorMessage = 'Username does not exist.';
     }
+
 
     mysqli_close($conn);
 }

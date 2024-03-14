@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Battleship Game</title>
     <style>
+
  body {
             background-image: image-set("dT9rXxAkc.png");
             background-size: cover;
@@ -18,6 +19,7 @@
             text-align: center;
         }
         .board  {
+
             display: grid;
             grid-template-columns: 40px repeat(10, 40px);
             gap: 5px;
@@ -53,6 +55,7 @@
 <body>
 
         <a href="register.php">Register</a> <a href="logout.php">Logout</a>
+
         <h1 class="tyt">Statki</h1>
 
 <h2 style="float: left;">Twoje</h2>
@@ -65,6 +68,7 @@
 
 <h2 class="status">Status</h2>
 <div id="gameStatus" class="status"></div>
+
 
 
     <script>
