@@ -1,14 +1,12 @@
 <?php
 session_start();
 
+$battleshipFrameDisplay = 'none';
+$errorMessage = '';
+
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     $battleshipFrameDisplay = 'block';
-    $errorMessage = '';
-} else {
-    $battleshipFrameDisplay = 'none';
-    $errorMessage = '';
 }
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
@@ -18,24 +16,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $db_password = "";
     $database = "ships";
 
-    $conn = new mysqli($servername, $db_username, $db_password, $database);
+    $conn = mysqli_connect($servername, $db_username, $db_password, $database);
 
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    if (!$conn) {
+        die("Connection failed: " . mysqli_connect_error());
     }
 
-    $query = "SELECT * FROM playerdata WHERE username = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $username = mysqli_real_escape_string($conn, $username);
+    $query = "SELECT * FROM playerdata WHERE username = '$username'";
+    $result = mysqli_query($conn, $query);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+
         if ($password === $row['password']) {
             $_SESSION['loggedin'] = true;
             $battleshipFrameDisplay = 'block';
-            $errorMessage = '';
         } else {
             $errorMessage = 'Incorrect password.';
         }
@@ -43,8 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMessage = 'Username does not exist.';
     }
 
-    $stmt->close();
-    $conn->close();
+    mysqli_close($conn);
 }
 ?>
 
@@ -69,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </style>
 </head>
 <body>
-    <h1>~Battleship Game~</h1>
+    <h1>Battleship Game</h1>
     <div id="inputBox">
         <form action="" method="post">
             <label for="username">Enter username:</label><br>
@@ -81,7 +76,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="register.php">Register</a> <a href="logout.php">Logout</a>
     </div>
 
-    <p align="center" id="battleshipFrame"><iframe src="statki.html" width="2000" height="800"></iframe></p>
+    <p align="center" id="battleshipFrame">
+        <?php
+        if ($battleshipFrameDisplay === 'block') {
+            header("Location: statki.php");
+        }
+        ?>
+    </p>
 
     <div id="error-message"><?php echo $errorMessage; ?></div>
 </body>

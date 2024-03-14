@@ -5,6 +5,6 @@ $_SESSION = array();
 
 session_destroy();
 
-header("location: mainstatki.php");
+header("location: index.php");
 exit;
 ?>
