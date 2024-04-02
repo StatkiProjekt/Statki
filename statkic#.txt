@@ -1,0 +1,203 @@
+using System;
+
+class Program
+{
+    static int gop = 0;
+    static int goc = 0;
+    static Random random = new Random();
+
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Gra w statki");
+
+        int k, w;
+        int s1x, s1y, s2x, s2y, s3x, s3y, s4x, s4y;
+        int c1x, c1y, c2x, c2y, c3x, c3y, c4x, c4y;
+
+        // Ustawianie statków gracza
+        Console.WriteLine("Ustaw s1 x 0-9:");
+        s1x = int.Parse(Console.ReadLine());
+        while (s1x > 9)
+        {
+            Console.WriteLine("Podaj s1 x 0-9:");
+            s1x = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s1 y 0-9:");
+        s1y = int.Parse(Console.ReadLine());
+        while (s1y > 9)
+        {
+            Console.WriteLine("Podaj s1 y 0-9:");
+            s1y = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s2 x 0-9:");
+        s2x = int.Parse(Console.ReadLine());
+        while (s2x > 9)
+        {
+            Console.WriteLine("Podaj s2 x 0-9:");
+            s2x = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s2 y 0-9:");
+        s2y = int.Parse(Console.ReadLine());
+        while (s2y > 9)
+        {
+            Console.WriteLine("Podaj s2 y 0-9:");
+            s2y = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s3 x 0-9:");
+        s3x = int.Parse(Console.ReadLine());
+        while (s3x > 9)
+        {
+            Console.WriteLine("Podaj s3 x 0-9:");
+            s3x = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s3 y 0-9:");
+        s3y = int.Parse(Console.ReadLine());
+        while (s3y > 9)
+        {
+            Console.WriteLine("Podaj s3 y 0-9:");
+            s3y = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s4 x 0-9:");
+        s4x = int.Parse(Console.ReadLine());
+        while (s4x > 9)
+        {
+            Console.WriteLine("Podaj s4 x 0-9:");
+            s4x = int.Parse(Console.ReadLine());
+        }
+        Console.WriteLine("Ustaw s4 y 0-9:");
+        s4y = int.Parse(Console.ReadLine());
+        while (s4y > 9)
+        {
+            Console.WriteLine("Podaj s4 y 0-9:");
+            s4y = int.Parse(Console.ReadLine());
+        }
+
+        c1x = random.Next(10);
+        c1y = random.Next(10);
+        c2x = random.Next(10);
+        c2y = random.Next(10);
+        c3x = random.Next(10);
+        c3y = random.Next(10);
+        c4x = random.Next(10);
+        c4y = random.Next(10);
+
+        while (gop < 4 || goc < 4)
+        {
+            Console.WriteLine("Podaj kolumnę 0-9:");
+            k = int.Parse(Console.ReadLine());
+            while (k > 9)
+            {
+                Console.WriteLine("Podaj kolumnę 0-9:");
+                k = int.Parse(Console.ReadLine());
+            }
+            Console.WriteLine("Podaj wiersz 0-9:");
+            w = int.Parse(Console.ReadLine());
+            while (w > 9)
+            {
+                Console.WriteLine("Podaj wiersz 0-9:");
+                w = int.Parse(Console.ReadLine());
+            }
+
+            plansza(k, w, s1x, s2x, s3x, s4x, s1y, s2y, s3y, s4y, c1x, c1y, c2x, c2y, c3x, c3y, c4x, c4y);
+        }
+    }
+
+    static void plansza(int k, int w, int s1x, int s2x, int s3x, int s4x, int s1y, int s2y, int s3y, int s4y, int c1x, int c1y, int c2x, int c2y, int c3x, int c3y, int c4x, int c4y)
+    {
+        bool ptraf = false;
+        bool ctraf = false;
+
+        int[,] p_plansza = new int[10, 10];
+
+        int[,] c_plansza = new int[10, 10];
+
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                p_plansza[i, j] = 0;
+                if ((i == s1x && j == s1y) || (i == s2x && j == s2y) || (i == s3x && j == s3y) || (i == s4x && j == s4y))
+                {
+                    p_plansza[i, j] = 1;
+                }
+            }
+        }
+
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                c_plansza[i, j] = 0;
+                if ((i == c1x && j == c1y) || (i == c2x && j == c2y) || (i == c3x && j == c3y) || (i == c4x && j == c4y))
+                {
+                    c_plansza[i, j] = 1;
+                }
+            }
+        }
+
+        Console.WriteLine("PLAYER TURN:");
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                if ((i == k && j == w) && c_plansza[i, j] == 1)
+                {
+                    c_plansza[i, j] = 2;
+                    ptraf = true;
+                    gop++;
+                }
+                if ((i == k && j == w) && c_plansza[i, j] == 0)
+                {
+                    c_plansza[i, j] = 3;
+                }
+            }
+        }
+
+        if (ptraf == false)
+        {
+            Console.WriteLine("Pudło");
+        }
+        if (ptraf == true)
+        {
+            Console.WriteLine("Trafiony");
+        }
+
+        Console.WriteLine("NPC TURN:");
+        int cx = random.Next(10);
+        int cy = random.Next(10);
+
+        for (int i = 0; i < 10; i++)
+        {
+            for (int j = 0; j < 10; j++)
+            {
+                if ((i == cx && j == cy) && p_plansza[i, j] == 1)
+                {
+                    p_plansza[i, j] = 4;
+                    ctraf = true;
+                    goc++;
+                }
+                if ((i == cx && j == cy) && p_plansza[i, j] == 0)
+                {
+                    p_plansza[i, j] = 5;
+                }
+            }
+        }
+
+        if (ctraf == false)
+        {
+            Console.WriteLine("Pudło");
+        }
+        if (ctraf == true)
+        {
+            Console.WriteLine("Trafiony");
+        }
+        if (gop == 4)
+        {
+            Console.WriteLine("Gracz wygrał");
+        }
+        if (goc == 4)
+        {
+            Console.WriteLine("CPU wygrał");
+        }
+    }
+}
